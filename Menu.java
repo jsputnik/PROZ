@@ -2,8 +2,10 @@ package com.checkers;
 import javax.swing.*;
 
 public class Menu extends JFrame {
-    public Menu(int panelmode, int gamemode) {
+    public int gamemode;
+    public Menu(int panelmode, int gmode) {
         super("Checkers");
+        gamemode = gmode;
         //panelmode: 0 - StartMenu, 1 - GmodeMenu, 2 - HelpMenu, 3 - SetNameMenu
         //gamemode: 0 - not chosen yet, 1 - 6x6, 2 - 8x8, 3 - 10x10
         if (panelmode == 0) {
