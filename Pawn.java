@@ -14,7 +14,7 @@ public class Pawn {
             colour = c;
             lives = 2;
         }
-        //copy copnstructor
+        //copy constructor
         public Pawn(Pawn pawn) {
             colour = pawn.colour;
             lives = pawn.lives;
