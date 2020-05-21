@@ -18,10 +18,10 @@ public class Field {
         pawn = new Pawn();
     }
     //not empty field constructor
-    public Field(int a, int b, boolean c) {
+    public Field(int a, int b, boolean c, boolean t) {
         x = a;
         y = b;
-        pawn = new Pawn(c);
+        pawn = new Pawn(c, t);
     }
     //copy constructor
     public Field(Field field) {
@@ -50,7 +50,18 @@ public class Field {
         return pawn.remLife();
     }
     //add new pawn on the field
-    public void addPawn(boolean c) {
-        pawn = new Pawn(c);
+    public void addPawn(boolean c) { pawn = new Pawn(c, false); }
+    //move pawn
+    public void movePawn(Pawn p) { pawn = new Pawn(p); }
+    //convert pawn to king
+    public void convertToKing () {
+        pawn.convertToKing();
+    }
+
+    public boolean equalTo(Field field) {
+        if (x == field.x && y == field.y) {
+            return true;
+        }
+        return false;
     }
 }
