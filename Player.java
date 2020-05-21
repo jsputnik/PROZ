@@ -173,7 +173,7 @@ public class Player {
             }
         }
         else {
-            if (field.getY() == board.getHeight()) {
+            if (field.getY() == board.getHeight() - 1) {
                 field.convertToKing();
             }
         }
