@@ -5,6 +5,7 @@ public class Field
     private int x;
     private int y;
     private Pawn pawn;
+    private boolean selected = false;
     //if field is empty or no
     public boolean taken()
     {
@@ -32,6 +33,14 @@ public class Field
         pawn = field.pawn;
     }
 
+    public void select()
+    {
+        selected = true;
+    }
+    public void unselect()
+    {
+        selected = false;
+    }
     public int getX()
     {
         return x;

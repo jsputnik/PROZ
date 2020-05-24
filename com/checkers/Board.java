@@ -11,6 +11,7 @@ public class Board
     public Board(int mode, boolean color)
     {
         this.mode = mode;
+        this.color = color;
         if(mode == 1)
             width = 6;
         else if(mode == 2)
