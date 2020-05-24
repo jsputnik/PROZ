@@ -64,7 +64,6 @@ public class Player {
             }
             else {
                 newField.movePawn(currentField.getPawn()); //moving pawn
-                currentField.remPawn();
                 convertToKing(newField);
             }
         }
@@ -78,7 +77,6 @@ public class Player {
             else if (absDistanceX == 0 || absDistanceY == 0) {
                 if (!searchMiddleFieldsLinearly(currentField, newField)) {
                     newField.movePawn(currentField.getPawn()); //moving pawn
-                    currentField.remPawn();
                 }
             }
         }
@@ -160,8 +158,7 @@ public class Player {
             if (!midField.remLife()) { //if dead
                 --opponent.pawnCount;
             }
-            newField.movePawn(oldField.getPawn());
-            oldField.remPawn();
+            newField.movePawn(oldField.getPawn()); //moving pawn
             return true;
         }
     }
@@ -173,7 +170,7 @@ public class Player {
             }
         }
         else {
-            if (field.getY() == board.getHeight() - 1) {
+            if (field.getY() == board.getHeight()) {
                 field.convertToKing();
             }
         }
