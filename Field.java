@@ -52,7 +52,10 @@ public class Field {
     //add new pawn on the field
     public void addPawn(boolean c) { pawn = new Pawn(c, false); }
     //move pawn
-    public void movePawn(Pawn p) { pawn = new Pawn(p); }
+    public void movePawn(Pawn p) {
+        pawn = new Pawn(p);
+        p.remPawn();
+    }
     //convert pawn to king
     public void convertToKing () {
         pawn.convertToKing();
