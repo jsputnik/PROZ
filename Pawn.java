@@ -1,16 +1,16 @@
 package com.checkers;
 
 public class Pawn {
-        enum Type {BASIC, KING, DUMMY};
+        enum Type {BASIC, KING};
 
         private Colour colour;
         private int lives;
         private Type type;
         //dummy Pawn constructor
         public Pawn() {
-            colour = Colour.DUMMY; //dummy
-            lives = 0; //dummy
-            type = Type.DUMMY; //dummy
+            colour = Colour.BLACK;
+            lives = 0;
+            type = Type.BASIC;
         }
         //constructor for adding pawn to the field
         public Pawn(Colour c, Type t) {
