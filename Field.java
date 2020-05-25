@@ -1,15 +1,18 @@
 package com.checkers;
 
 public class Field {
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
     private Pawn pawn;
     //if field is empty or no
     public boolean taken() {
-        if (pawn.getLives() == 0) {
-            return false;
-        }
-        return true;
+        return pawn.getLives() != 0;
+    }
+    //dummy field constructor
+    public Field() {
+        x = -1;
+        y = -1;
+        pawn = new Pawn();
     }
     //empty field constructor
     public Field(int a, int b) {
@@ -56,15 +59,17 @@ public class Field {
         pawn = new Pawn(p);
         p.remPawn();
     }
+    //move king
+    public void moveKing(Pawn p) {
+        movePawn(p);
+        pawn.remLife();
+    }
     //convert pawn to king
     public void convertToKing () {
         pawn.convertToKing();
     }
 
     public boolean equalTo(Field field) {
-        if (x == field.x && y == field.y) {
-            return true;
-        }
-        return false;
+        return x == field.x && y == field.y;
     }
 }
