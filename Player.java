@@ -5,7 +5,7 @@ public class Player {
     int pawnCount;
     int maxPawnCount;
     Player opponent; //not needed
-    boolean colour;
+    Colour colour;
     Board board;
 
     public void make_turn() {
@@ -28,7 +28,7 @@ public class Player {
             //try again
         }
         //change
-        else if ((!colour && revField.getY() == board.getHeight()) || (colour && revField.getY() == 0)) {
+        else if ((colour == Colour.BLACK && revField.getY() == board.getHeight()) || (colour == Colour.WHITE && revField.getY() == 0)) {
             revField.addPawn(colour);
             --reviveCount;
             ++pawnCount;
@@ -61,7 +61,7 @@ public class Player {
             //try again
         }
         //if pawn
-        else if (!currentField.getPawn().getType()) {
+        else if (currentField.getPawn().getType() == Pawn.Type.BASIC) {
             if (absDistanceX == 2 && absDistanceY == 2) {
                 take_pawn(opponent, currentField, searchMiddleFieldsDiagonally(currentField, newField), newField);
                 convertToKing(newField);
@@ -75,7 +75,7 @@ public class Player {
             }
         }
         //if king
-        else if (currentField.getPawn().getType()) {
+        else if (currentField.getPawn().getType() == Pawn.Type.KING) {
             if (absDistanceX == absDistanceY) {
                 take_pawn(opponent, currentField, searchMiddleFieldsDiagonally(currentField, newField), newField);
             }
@@ -203,14 +203,14 @@ public class Player {
                 --opponent.pawnCount;
             }
             newField.movePawn(oldField.getPawn()); //moving pawn
-            if (newField.getPawn().getType()) { //if king
+            if (newField.getPawn().getType() == Pawn.Type.KING) { //if king
                 newField.remLife();
             }
         }
     }
     //change
     private void convertToKing(Field field) {
-        if (!colour) {
+        if (colour == Colour.BLACK) {
             if (field.getY() == 0) {
                 field.convertToKing();
             }
