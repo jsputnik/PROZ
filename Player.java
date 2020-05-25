@@ -4,7 +4,7 @@ public class Player {
     int reviveCount;
     int pawnCount;
     int maxPawnCount;
-    Player opponent;
+    Player opponent; //not needed
     boolean colour;
     Board board;
 
@@ -16,21 +16,26 @@ public class Player {
 
     private void revive(Field revField) {
         if (reviveCount == 0) {
-            System.out.println("Revive limit reached");//revive limit reached
+            System.out.println("Revive limit reached");
+            //try again
         }
         else if (pawnCount == maxPawnCount) {
-            System.out.println("No pawn has died yet");//invalid revive, no pawn has died yet
+            System.out.println("No pawn has died yet");
+            //try again
         }
         else if (revField.taken()) {
-            System.out.println("Space is occupied");//invalid revive, space is occupied
+            System.out.println("Space is occupied");
+            //try again
         }
-        else if ((colour == false && revField.getY() == board.getHeight()) || (colour == true && revField.getY() == 0)) {
+        //change
+        else if ((!colour && revField.getY() == board.getHeight()) || (colour && revField.getY() == 0)) {
             revField.addPawn(colour);
             --reviveCount;
             ++pawnCount;
         }
         else {
-            System.out.println("Can only revive at the bottom/top row");//invalid revive, can revive only at the bottom/top row
+            System.out.println("Can only revive at the bottom/top row");
+            //try again
         }
     }
 
@@ -40,27 +45,29 @@ public class Player {
         int distanceY = newField.getY() - currentField.getY();
         int absDistanceY = Math.abs(distanceY);
         if (!currentField.taken()) {
-            ;//invalid move, no pawn chosen
+            System.out.println("No pawn chosen");
+            //try again
         }
         else if (currentField.getPawn().getColour() != colour) {
-            ;//invalid move, choose your pawn first
+            System.out.println("Choose your pawn first");
+            //try again
         }
         else if (newField.taken()) {
-            ;//invalid move, space is occupied
+            System.out.println("Space is occupied");
+            //try again
         }
         else if (currentField.equalTo(newField)) {
-            ;//invalid move, choose 2 different fields
+            System.out.println("Choose 2 different fields");
+            //try again
         }
         //if pawn
         else if (!currentField.getPawn().getType()) {
             if (absDistanceX == 2 && absDistanceY == 2) {
-                if (!take_pawn(opponent, currentField, searchMiddleFieldsDiagonally(currentField, newField), newField)) {
-                    //invalid take_pawn, exception
-                }
+                take_pawn(opponent, currentField, searchMiddleFieldsDiagonally(currentField, newField), newField);
                 convertToKing(newField);
             }
             else if (absDistanceX > 1 || absDistanceY > 1 || absDistanceX == absDistanceY || (distanceX == 0 && distanceY == -1)) {
-                ;//invalid move, can only move by 1 field up/right/left
+                System.out.println("Can only move by 1 field up/right/left");
             }
             else {
                 newField.movePawn(currentField.getPawn()); //moving pawn
@@ -70,99 +77,138 @@ public class Player {
         //if king
         else if (currentField.getPawn().getType()) {
             if (absDistanceX == absDistanceY) {
-                if (!take_pawn(opponent, currentField, searchMiddleFieldsDiagonally(currentField, newField), newField)) {
-                    ;//invalid take_pawn, exception
-                }
+                take_pawn(opponent, currentField, searchMiddleFieldsDiagonally(currentField, newField), newField);
             }
             else if (absDistanceX == 0 || absDistanceY == 0) {
                 if (!searchMiddleFieldsLinearly(currentField, newField)) {
-                    newField.movePawn(currentField.getPawn()); //moving pawn
-                }
-            }
-        }
-    }
-    //returns a taken field or exception
-    private Field searchMiddleFieldsDiagonally(Field oldField, Field newField) {
-        int distanceX = newField.getX() - oldField.getX();
-        int absDistanceX = Math.abs(distanceX);
-        int distanceY = newField.getY() - oldField.getY();
-        int absDistanceY = Math.abs(distanceY);
-        int x = absDistanceX - 1;
-        int takenCount = 0;
-        Field fieldToTake = new Field(-1, -1);
-        for (int y = absDistanceY - 1; takenCount < 2 || y > 0; --y) {
-            if (board.findField(oldField.getX() + x, oldField.getY() + y).taken()) {
-                ++takenCount;
-                fieldToTake = board.findField(oldField.getX() + x, oldField.getY() + y);
-            }
-            --x;
-            }
-        if (takenCount != 1) {
-            //exception
-        }
-        return fieldToTake;
-    }
-    //returns whether found taken fields or no
-    private boolean searchMiddleFieldsLinearly(Field oldField, Field newField) {
-        int distanceX = newField.getX() - oldField.getX();
-        int absDistanceX = Math.abs(distanceX);
-        int distanceY = newField.getY() - oldField.getY();
-        int absDistanceY = Math.abs(distanceY);
-        boolean invalid = false;
-        if (absDistanceY == 0) {
-            if (distanceX > 0) {
-                for (int x = distanceX - 1; x > 0 || invalid; --x) {
-                    if (board.findField(oldField.getX() + x, oldField.getY()).taken()) {
-                        invalid = true;
-                    }
+                    newField.moveKing(currentField.getPawn()); //moving king
                 }
             }
             else {
-                for (int x = distanceX - 1; x < 0 || invalid; ++x) {
-                    if (board.findField(oldField.getX() + x, oldField.getY()).taken()) {
-                        invalid = true;
-                    }
-                }
+                System.out.println("Can only move by X fields up/right/left or X fields diagonally while taking pawn");
             }
         }
         else {
-            if (distanceY > 0) {
-                for (int y = distanceY - 1; y > 0 || invalid; --y) {
-                    if (board.findField(oldField.getX(), oldField.getY() + y).taken()) {
-                        invalid = true;
-                    }
+            System.out.println("Other invalid move");
+            //try again
+        }
+    }
+    //returns a taken field or dummy field if less or more than 1 pawn found
+    //expects newField to be empty
+    private Field searchMiddleFieldsDiagonally(Field oldField, Field newField) {
+        int distanceX = newField.getX() - oldField.getX();
+        int distanceY = newField.getY() - oldField.getY();
+        int takenCount = 0;
+        Field fieldToTake = new Field(); //dummy field
+        if (distanceX > 0 && distanceY > 0) {
+            int x = distanceX - 1;
+            for (int y = distanceY - 1; takenCount < 2 || y > 0; --y) {
+                if (board.findField(oldField.getX() + x, oldField.getY() + y).taken()) {
+                    ++takenCount;
+                    fieldToTake = board.findField(oldField.getX() + x, oldField.getY() + y);
                 }
+                --x;
             }
-            else {
-                for (int y = distanceY - 1; y < 0 || invalid; ++y) {
-                    if (board.findField(oldField.getX(), oldField.getY() + y).taken()) {
-                        invalid = true;
-                    }
+        }
+        else if (distanceX > 0 && distanceY < 0) {
+            int x = distanceX - 1;
+            for (int y = distanceY + 1; takenCount < 2 || y < 0; ++y) {
+                if (board.findField(oldField.getX() + x, oldField.getY() + y).taken()) {
+                    ++takenCount;
+                    fieldToTake = board.findField(oldField.getX() + x, oldField.getY() + y);
+                }
+                --x;
+            }
+        }
+        else if (distanceX < 0 && distanceY > 0) {
+            int x = distanceX + 1;
+            for (int y = distanceY - 1; takenCount < 2 || y > 0; --y) {
+                if (board.findField(oldField.getX() + x, oldField.getY() + y).taken()) {
+                    ++takenCount;
+                    fieldToTake = board.findField(oldField.getX() + x, oldField.getY() + y);
+                }
+                ++x;
+            }
+        }
+        else {
+            int x = distanceX + 1;
+            for (int y = distanceY + 1; takenCount < 2 || y < 0; ++y) {
+                if (board.findField(oldField.getX() + x, oldField.getY() + y).taken()) {
+                    ++takenCount;
+                    fieldToTake = board.findField(oldField.getX() + x, oldField.getY() + y);
+                }
+                ++x;
+            }
+        }
+        if (takenCount != 1) {
+            fieldToTake = new Field(); //dummy field
+        }
+        return fieldToTake;
+    }
+    //returns false if no taken fields found
+    //excpects newField to be empty
+    private boolean searchMiddleFieldsLinearly(Field oldField, Field newField) {
+        int distanceX = newField.getX() - oldField.getX();
+        int distanceY = newField.getY() - oldField.getY();
+        boolean invalid = false;
+        if (distanceY == 0 && distanceX > 0) {
+            for (int x = distanceX - 1; x > 0 || !invalid; --x) {
+                if (board.findField(oldField.getX() + x, oldField.getY()).taken()) {
+                    invalid = true;
                 }
             }
         }
-        if (invalid) {
-            return true;//invalid move, there are pawns on the way, exception
+        else if (distanceY == 0 && distanceX < 0) {
+            for (int x = distanceX + 1; x > 0 || !invalid; ++x) {
+                if (board.findField(oldField.getX() + x, oldField.getY()).taken()) {
+                    invalid = true;
+                }
+            }
         }
-        return true;
+        else if (distanceX == 0 && distanceY > 0) {
+            for (int y = distanceY - 1; y > 0 || !invalid; --y) {
+                if (board.findField(oldField.getX(), oldField.getY() + y).taken()) {
+                    invalid = true;
+                }
+            }
+        }
+        else if (distanceX == 0 && distanceY < 0){
+            for (int y = distanceY + 1; y > 0 || !invalid; ++y) {
+                if (board.findField(oldField.getX(), oldField.getY() + y).taken()) {
+                    invalid = true;
+                }
+            }
+        }
+        //shouldn't get there
+        else {
+            System.out.println("Unexpected arguments in searchMiddleFieldsLinearly(Field, Field)");
+            invalid = true;
+            System.exit(1);
+        }
+        return invalid;
     }
 
-    private boolean take_pawn(Player opponent, Field oldField, Field midField, Field newField) {
-        if (midField.getPawn().getLives() == 0) {
-            return false;//invalid move, no pawn to take
+    private void take_pawn(Player opponent, Field oldField, Field midField, Field newField) {
+        Field dummyField = new Field();
+        if (midField.equalTo(dummyField)) {
+            System.out.println("Invalid number of pawns to take (must be 1)");
+            //try again
         }
         else if (colour == midField.getPawn().getColour()) {
-            return false;//invalid move, cant take your own pawn
+            System.out.println("Can't take your own pawn");
+            //try again
         }
         else {
             if (!midField.remLife()) { //if dead
                 --opponent.pawnCount;
             }
             newField.movePawn(oldField.getPawn()); //moving pawn
-            return true;
+            if (newField.getPawn().getType()) { //if king
+                newField.remLife();
+            }
         }
     }
-
+    //change
     private void convertToKing(Field field) {
         if (!colour) {
             if (field.getY() == 0) {
