@@ -1,21 +1,20 @@
 package com.checkers;
 
 public class Pawn {
-        private boolean colour; //false - black, true - white
+        private final boolean colour; //false - black, true - white
         private int lives;
         private boolean type; //false - pawn, true - king
-        //private int state; //not neccessary
-        //empty field
+        //dummy Pawn constructor
         public Pawn() {
-            colour = false; //not important
-            lives = 0; //not important
-            type = false; //not important
+            colour = false; //dummy
+            lives = 0; //dummy
+            type = false; //dummy
         }
-        //put pawn on the field
+        //constructor for adding pawn to the field
         public Pawn(boolean c, boolean t) {
             colour = c;
-            lives = 2;
             type = t;
+            lives = type ? 5 : 2;
         }
         //copy constructor
         public Pawn(Pawn pawn) {
@@ -33,14 +32,10 @@ public class Pawn {
         }
 
         public boolean getType() { return type; }
-
+        //false if dead
         public boolean remLife() {
             --lives;
-            if (lives == 0) {
-                remPawn();
-                return false;
-            }
-            return true;
+            return lives != 0;
         }
 
         public void remPawn() {
