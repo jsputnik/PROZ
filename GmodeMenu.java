@@ -42,6 +42,7 @@ public class GmodeMenu extends JFrame implements ActionListener {
             String color = (String)setColor.showInputDialog(this,"Choose color:","Set color", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
             Player p = new Player(1, color, nickname);
             dispose();
+            new GUI(p);
             //connect i GUI(), moze byc tez w mainie chyba
         }
         else if (source == mode2) {
@@ -52,6 +53,7 @@ public class GmodeMenu extends JFrame implements ActionListener {
             String color = (String)setColor.showInputDialog(this,"Choose color:","Set color", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
             Player p = new Player(2, color, nickname);
             dispose();
+            new GUI(p);
             //connect i GUI(), moze byc tez w mainie chyba
         }
         else if (source == mode3) {
@@ -62,6 +64,7 @@ public class GmodeMenu extends JFrame implements ActionListener {
             String color = (String)setColor.showInputDialog(this,"Choose color:","Set color", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
             Player p = new Player(3, color, nickname);
             dispose();
+            new GUI(p);
             //connect i GUI(), moze byc tez w mainie chyba
         }
         else if (source == back) {
