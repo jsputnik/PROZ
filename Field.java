@@ -21,7 +21,7 @@ public class Field {
         pawn = new Pawn();
     }
     //not empty field constructor
-    public Field(int a, int b, Colour c, Pawn.Type t) {
+    public Field(int a, int b, Pawn.Color c, Pawn.Type t) {
         x = a;
         y = b;
         pawn = new Pawn(c, t);
@@ -53,7 +53,7 @@ public class Field {
         return pawn.remLife();
     }
     //add new pawn on the field
-    public void addPawn(Colour c) { pawn = new Pawn(c, Pawn.Type.BASIC); }
+    public void addPawn(Pawn.Color c) { pawn = new Pawn(c, Pawn.Type.BASIC); }
     //move pawn
     public void movePawn(Pawn p) {
         pawn = new Pawn(p);
