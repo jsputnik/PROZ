@@ -35,16 +35,34 @@ public class GmodeMenu extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent pos) {
         Object source = pos.getSource();
         if (source == mode1) {
-            new SetNameMenu(1);
+            JOptionPane setName = new JOptionPane();
+            String nickname = setName.showInputDialog(this, "Choose name:", "Set name", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane setColor = new JOptionPane();
+            Object[] options = {"black", "white"};
+            String color = (String)setColor.showInputDialog(this,"Choose color:","Set color", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+            Player p = new Player(1, color, nickname);
             dispose();
+            //connect i GUI(), moze byc tez w mainie chyba
         }
         else if (source == mode2) {
-            new SetNameMenu(2);
+            JOptionPane setName = new JOptionPane();
+            String nickname = setName.showInputDialog(this, "Choose name:", "Set name", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane setColor = new JOptionPane();
+            Object[] options = {"black", "white"};
+            String color = (String)setColor.showInputDialog(this,"Choose color:","Set color", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+            Player p = new Player(2, color, nickname);
             dispose();
+            //connect i GUI(), moze byc tez w mainie chyba
         }
         else if (source == mode3) {
-            new SetNameMenu(3);
+            JOptionPane setName = new JOptionPane();
+            String nickname = setName.showInputDialog(this, "Choose name:", "Set name", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane setColor = new JOptionPane();
+            Object[] options = {"black", "white"};
+            String color = (String)setColor.showInputDialog(this,"Choose color:","Set color", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+            Player p = new Player(3, color, nickname);
             dispose();
+            //connect i GUI(), moze byc tez w mainie chyba
         }
         else if (source == back) {
             new StartMenu();
