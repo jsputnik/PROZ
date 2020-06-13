@@ -1,8 +1,8 @@
 package com.checkers;
 
 public class Field {
-    private final int x;
-    private final int y;
+    private int x;
+    private int y;
     private Pawn pawn;
     //if field is empty or no
     public boolean taken() {
@@ -71,5 +71,11 @@ public class Field {
 
     public boolean equalTo(Field field) {
         return x == field.x && y == field.y;
+    }
+
+    public void swap(Field field) {
+        Pawn pawnTemp = pawn;
+        pawn = field.pawn;
+        field.pawn = pawnTemp;
     }
 }
