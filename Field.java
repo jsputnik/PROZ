@@ -73,7 +73,7 @@ public class Field {
         return x == field.x && y == field.y;
     }
 
-    public void swap(Field field) {
+    public void swapPawns(Field field) {
         Pawn pawnTemp = pawn;
         pawn = field.pawn;
         field.pawn = pawnTemp;
