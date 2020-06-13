@@ -1,6 +1,8 @@
 package com.checkers;
 
-public class Board {
+import java.io.Serializable;
+
+public class Board implements Serializable {
     private Field[] fields;
     private int width;
     private int height;
@@ -35,7 +37,7 @@ public class Board {
             }
         }
     }
-    //prints upside down, top rows = bottom rows
+
     public void printBoard() {
         int w = 0;
         for (int y = height - 1; y >= 0; --y) {
@@ -55,11 +57,8 @@ public class Board {
 
     public void rotate() {
         int j = width * height - 1;
-        Field temp = new Field();
-        for (int i = 0; i < width * height / 2 - 1; ++i) {
-            temp = fields[i];
-            fields[i] = fields[j];
-            fields[j] = temp;
+        for (int i = 0; i < width * height / 2; ++i) {
+            fields[i].swap(fields[j]);
             --j;
         }
     }
