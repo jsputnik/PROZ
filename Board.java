@@ -43,16 +43,27 @@ public class Board implements Serializable {
         for (int y = height - 1; y >= 0; --y) {
             for (int x = 0; x < width; ++x) {
                 Field f = fields[y * width + x];
-                System.out.print("|");
-                System.out.print(f.getPawn().getColor());
-                System.out.print(", ");
-                System.out.print(f.getPawn().getLives());
-                System.out.print("|");
+                if (f.getPawn().getLives() == 0) {
+                    System.out.print("|[   ], [   ], 0| ");
+                }
+                else {
+                    System.out.print("|");
+                    System.out.print(f.getPawn().getType());
+                    if (f.getPawn().getType() == Pawn.Type.KING) {
+                        System.out.print(" ");
+                    }
+                    System.out.print(", ");
+                    System.out.print(f.getPawn().getColor());
+                    System.out.print(", ");
+                    System.out.print(f.getPawn().getLives());
+                    System.out.print("| ");
+                }
                 if ((mode == 1 && x == 5) || (mode == 2 && x == 7) || (mode == 3 && x == 9)) {
                     System.out.println("");
                 }
             }
         }
+        System.out.println("");
     }
 
     public void rotate() {
