@@ -1,20 +1,38 @@
 package com.checkers;
 
 public class Player {
-    int reviveCount;
-    int pawnCount;
-    int maxPawnCount;
-    Player opponent; //not needed
-    Colour colour;
-    Board board;
+    private int reviveCount;
+    private int pawnCount;
+    private int maxPawnCount;
+    public Pawn.Color color;
+    public Board board;
+    public String name;
+    public int mode;
 
-    public void make_turn() {
-        ;//if 2 arguments passed move();
-        //if 1 argument passed revive();
-        //else exception
+    public Player(int m, String c, String n) {
+        mode = m;
+        if (m == 1) {
+            reviveCount = 3;
+            maxPawnCount = 12;
+        }
+        else if (m == 2) {
+            reviveCount = 4;
+            maxPawnCount = 16;
+        }
+        else {
+            reviveCount = 5;
+            maxPawnCount = 20;
+        }
+        pawnCount = maxPawnCount;
+        color = Pawn.Color.BLACK;
+        if (c == "white") {
+            color = Pawn.Color.WHITE;
+        }
+        board = new Board(mode, color);
+        name = n;
     }
 
-    private void revive(Field revField) {
+    public void revive(Field revField) {
         if (reviveCount == 0) {
             System.out.println("Revive limit reached");
             //try again
@@ -28,8 +46,8 @@ public class Player {
             //try again
         }
         //change
-        else if ((colour == Colour.BLACK && revField.getY() == board.getHeight()) || (colour == Colour.WHITE && revField.getY() == 0)) {
-            revField.addPawn(colour);
+        else if ((color == Pawn.Color.BLACK && revField.getY() == board.getHeight()) || (color == Pawn.Color.WHITE && revField.getY() == 0)) {
+            revField.addPawn(color);
             --reviveCount;
             ++pawnCount;
         }
@@ -39,7 +57,7 @@ public class Player {
         }
     }
 
-    private void move(Field currentField, Field newField) {
+    public void move(Player opponent, Field currentField, Field newField) {
         int distanceX = newField.getX() - currentField.getX();
         int absDistanceX = Math.abs(distanceX);
         int distanceY = newField.getY() - currentField.getY();
@@ -48,7 +66,7 @@ public class Player {
             System.out.println("No pawn chosen");
             //try again
         }
-        else if (currentField.getPawn().getColour() != colour) {
+        else if (currentField.getPawn().getColor() != color) {
             System.out.println("Choose your pawn first");
             //try again
         }
@@ -194,7 +212,7 @@ public class Player {
             System.out.println("Invalid number of pawns to take (must be 1)");
             //try again
         }
-        else if (colour == midField.getPawn().getColour()) {
+        else if (color == midField.getPawn().getColor()) {
             System.out.println("Can't take your own pawn");
             //try again
         }
@@ -210,7 +228,7 @@ public class Player {
     }
     //change
     private void convertToKing(Field field) {
-        if (colour == Colour.BLACK) {
+        if (color == Pawn.Color.BLACK) {
             if (field.getY() == 0) {
                 field.convertToKing();
             }
