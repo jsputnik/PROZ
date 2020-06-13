@@ -32,6 +32,10 @@ public class Player {
         name = n;
     }
 
+    public Board getBoard() {
+        return board;
+    }
+
     public void revive(Field revField) {
         if (reviveCount == 0) {
             System.out.println("Revive limit reached");
@@ -45,8 +49,7 @@ public class Player {
             System.out.println("Space is occupied");
             //try again
         }
-        //change
-        else if ((color == Pawn.Color.BLACK && revField.getY() == board.getHeight()) || (color == Pawn.Color.WHITE && revField.getY() == 0)) {
+        else if (revField.getY() == 0) {
             revField.addPawn(color);
             --reviveCount;
             ++pawnCount;
@@ -226,17 +229,10 @@ public class Player {
             }
         }
     }
-    //change
+    
     private void convertToKing(Field field) {
-        if (color == Pawn.Color.BLACK) {
-            if (field.getY() == 0) {
-                field.convertToKing();
-            }
-        }
-        else {
-            if (field.getY() == board.getHeight()) {
-                field.convertToKing();
-            }
+        if (field.getY() == board.getHeight()) {
+            field.convertToKing();
         }
     }
 }
