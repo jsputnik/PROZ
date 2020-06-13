@@ -47,5 +47,6 @@ public class Pawn {
 
         public void convertToKing() {
             type = Type.KING;
+            lives = 5;
         }
 }
