@@ -36,6 +36,23 @@ public class Board {
         }
     }
 
+    //prints upside down, top rows = bottom rows
+    public void printBoard() {
+        int w = 0;
+        for (Field f : fields) {
+            System.out.print("|");
+            System.out.print(f.getPawn().getColor());
+            System.out.print(", ");
+            System.out.print(f.getPawn().getLives());
+            System.out.print("|");
+            if ((mode == 1 && w == 5) || (mode == 2 && w == 7) || (mode == 3 && w == 9)) {
+                System.out.println("");
+                w = -1;
+            }
+            ++w;
+        }
+    }
+    
     public int getHeight() {
         return height - 1;
     }
