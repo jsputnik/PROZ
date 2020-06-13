@@ -35,7 +35,7 @@ public class Board {
             }
         }
     }
-    //prints normally
+    //prints upside down, top rows = bottom rows
     public void printBoard() {
         int w = 0;
         for (int y = height - 1; y >= 0; --y) {
