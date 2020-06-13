@@ -58,7 +58,7 @@ public class Board implements Serializable {
     public void rotate() {
         int j = width * height - 1;
         for (int i = 0; i < width * height / 2; ++i) {
-            fields[i].swap(fields[j]);
+            fields[i].swapPawns(fields[j]);
             --j;
         }
     }
