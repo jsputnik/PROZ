@@ -39,8 +39,8 @@ public class GUI extends JFrame implements ActionListener {
             System.out.println("opponent");
             opponent.getBoard().printBoard();
             player.getBoard().rotate();
-            System.out.println("current players rotated board");
-            player.getBoard().printBoard();
+            //System.out.println("current players rotated board");
+            //player.getBoard().printBoard();
             //player.revive(player.board.findField(3, 0));
         }
         else if (source == move) {
