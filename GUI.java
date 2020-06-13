@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 public class GUI extends JFrame implements ActionListener {
     private JButton revive;
     private JButton move;
-    private Board board;
+    //private Board board;
     private Player player;
     private Player opponent;
 
@@ -20,7 +20,7 @@ public class GUI extends JFrame implements ActionListener {
         setSize(500, 500);
         player = p;
         opponent = new Player(1, "white", "two");
-        board = new Board(p.mode, p.color);
+        //board = new Board(p.mode, p.color);
         revive = new JButton("revive");
         move = new JButton("move");
         revive.addActionListener(this);
