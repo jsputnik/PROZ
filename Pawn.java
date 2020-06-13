@@ -2,31 +2,32 @@ package com.checkers;
 
 public class Pawn {
         enum Type {BASIC, KING};
+        enum Color {BLACK, WHITE};
 
-        private Colour colour;
+        private Color color;
         private int lives;
         private Type type;
         //dummy Pawn constructor
         public Pawn() {
-            colour = Colour.BLACK;
+            color = Color.BLACK;
             lives = 0;
             type = Type.BASIC;
         }
         //constructor for adding pawn to the field
-        public Pawn(Colour c, Type t) {
-            colour = c;
+        public Pawn(Color c, Type t) {
+            color = c;
             type = t;
             lives = type == Type.KING ? 5 : 2;
         }
         //copy constructor
         public Pawn(Pawn pawn) {
-            colour = pawn.colour;
+            color = pawn.color;
             lives = pawn.lives;
             type = pawn.type;
         }
 
-        public Colour getColour() {
-            return colour;
+        public Color getColor() {
+            return color;
         }
 
         public int getLives() {
