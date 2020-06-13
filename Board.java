@@ -35,24 +35,35 @@ public class Board {
             }
         }
     }
-
-    //prints upside down, top rows = bottom rows
+    //prints normally
     public void printBoard() {
         int w = 0;
-        for (Field f : fields) {
-            System.out.print("|");
-            System.out.print(f.getPawn().getColor());
-            System.out.print(", ");
-            System.out.print(f.getPawn().getLives());
-            System.out.print("|");
-            if ((mode == 1 && w == 5) || (mode == 2 && w == 7) || (mode == 3 && w == 9)) {
-                System.out.println("");
-                w = -1;
+        for (int y = height - 1; y >= 0; --y) {
+            for (int x = 0; x < width; ++x) {
+                Field f = fields[y * width + x];
+                System.out.print("|");
+                System.out.print(f.getPawn().getColor());
+                System.out.print(", ");
+                System.out.print(f.getPawn().getLives());
+                System.out.print("|");
+                if ((mode == 1 && x == 5) || (mode == 2 && x == 7) || (mode == 3 && x == 9)) {
+                    System.out.println("");
+                }
             }
-            ++w;
         }
     }
-    
+
+    public void rotate() {
+        int j = width * height - 1;
+        Field temp = new Field();
+        for (int i = 0; i < width * height / 2 - 1; ++i) {
+            temp = fields[i];
+            fields[i] = fields[j];
+            fields[j] = temp;
+            --j;
+        }
+    }
+
     public int getHeight() {
         return height - 1;
     }
