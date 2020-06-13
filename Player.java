@@ -2,7 +2,7 @@ package com.checkers;
 
 public class Player {
     private int reviveCount;
-    private int pawnCount;
+    public int pawnCount;
     private int maxPawnCount;
     public Pawn.Color color;
     public Board board;
@@ -123,17 +123,27 @@ public class Player {
         Field fieldToTake = new Field(); //dummy field
         if (distanceX > 0 && distanceY > 0) {
             int x = distanceX - 1;
-            for (int y = distanceY - 1; takenCount < 2 || y > 0; --y) {
+            for (int y = distanceY - 1; takenCount < 2 && oldField.getY() + y != newField.getY(); ++y) {
                 if (board.findField(oldField.getX() + x, oldField.getY() + y).taken()) {
                     ++takenCount;
                     fieldToTake = board.findField(oldField.getX() + x, oldField.getY() + y);
                 }
-                --x;
+                ++x;
             }
         }
         else if (distanceX > 0 && distanceY < 0) {
             int x = distanceX - 1;
-            for (int y = distanceY + 1; takenCount < 2 || y < 0; ++y) {
+            for (int y = distanceY + 1; takenCount < 2 && oldField.getY() + y != newField.getY(); --y) {
+                if (board.findField(oldField.getX() + x, oldField.getY() + y).taken()) {
+                    ++takenCount;
+                    fieldToTake = board.findField(oldField.getX() + x, oldField.getY() + y);
+                }
+                ++x;
+            }
+        }
+        else if (distanceX < 0 && distanceY > 0) {
+            int x = distanceX + 1;
+            for (int y = distanceY - 1; takenCount < 2 && oldField.getY() + y != newField.getY(); ++y) {
                 if (board.findField(oldField.getX() + x, oldField.getY() + y).taken()) {
                     ++takenCount;
                     fieldToTake = board.findField(oldField.getX() + x, oldField.getY() + y);
@@ -141,24 +151,14 @@ public class Player {
                 --x;
             }
         }
-        else if (distanceX < 0 && distanceY > 0) {
-            int x = distanceX + 1;
-            for (int y = distanceY - 1; takenCount < 2 || y > 0; --y) {
-                if (board.findField(oldField.getX() + x, oldField.getY() + y).taken()) {
-                    ++takenCount;
-                    fieldToTake = board.findField(oldField.getX() + x, oldField.getY() + y);
-                }
-                ++x;
-            }
-        }
         else {
             int x = distanceX + 1;
-            for (int y = distanceY + 1; takenCount < 2 || y < 0; ++y) {
+            for (int y = distanceY + 1; takenCount < 2 && oldField.getY() + y != newField.getY(); --y) {
                 if (board.findField(oldField.getX() + x, oldField.getY() + y).taken()) {
                     ++takenCount;
                     fieldToTake = board.findField(oldField.getX() + x, oldField.getY() + y);
                 }
-                ++x;
+                --x;
             }
         }
         if (takenCount != 1) {
@@ -229,7 +229,7 @@ public class Player {
             }
         }
     }
-    
+
     private void convertToKing(Field field) {
         if (field.getY() == board.getHeight()) {
             field.convertToKing();
