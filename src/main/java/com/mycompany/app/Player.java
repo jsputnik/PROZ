@@ -8,8 +8,10 @@ public class Player {
     public Board board;
     public String name;
     public int mode;
+    public String errorMsg;
 
     public Player(int m, String c, String n) {
+        errorMsg = "";
         mode = m;
         if (m == 1) {
             reviveCount = 3;
@@ -35,18 +37,21 @@ public class Player {
     public Board getBoard() {
         return board;
     }
-
-    public void revive(Field revField) {
+    //returns true if the turn is finished, otherwise false
+    public boolean revive(Field revField) {
         if (reviveCount == 0) {
-            System.out.println("Revive limit reached");
-            //try again
-        }
-        else if (pawnCount == maxPawnCount) {
-            System.out.println("No pawn has died yet");
+            errorMsg = "Revive limit reached";
+            return false;
             //try again
         }
         else if (revField.taken()) {
-            System.out.println("Space is occupied");
+            errorMsg = "Space is occupied";
+            return false;
+            //try again
+        }
+        else if (pawnCount == maxPawnCount) {
+            errorMsg = "Can't place anymore pawns";
+            return false;
             //try again
         }
         else if (revField.getY() == 0) {
@@ -55,64 +60,84 @@ public class Player {
             ++pawnCount;
         }
         else {
-            System.out.println("Can only revive at the bottom/top row");
+            errorMsg = "Can only revive at the bottom/top row";
+            return false;
             //try again
         }
+        return true;
     }
-
-    public void move(Player opponent, Field currentField, Field newField) {
+    //returns true if the turn is finished, toherwise false
+    public boolean move(Player opponent, Field currentField, Field newField) {
         int distanceX = newField.getX() - currentField.getX();
         int absDistanceX = Math.abs(distanceX);
         int distanceY = newField.getY() - currentField.getY();
         int absDistanceY = Math.abs(distanceY);
         if (!currentField.taken()) {
-            System.out.println("No pawn chosen");
+            errorMsg = "No pawn chosen";
+            return false;
             //try again
         }
         else if (currentField.getPawn().getColor() != color) {
-            System.out.println("Choose your pawn first");
+            errorMsg = "Choose your pawn first";
+            return false;
             //try again
         }
         else if (newField.taken()) {
-            System.out.println("Space is occupied");
+            errorMsg = "Space is occupied";
+            return false;
             //try again
         }
         else if (currentField.equalTo(newField)) {
-            System.out.println("Choose 2 different fields");
+            errorMsg = "Choose 2 different fields";
+            return false;
             //try again
         }
         //if pawn
         else if (currentField.getPawn().getType() == Pawn.Type.BASIC) {
             if (absDistanceX == 2 && absDistanceY == 2) {
-                take_pawn(opponent, currentField, searchMiddleFieldsDiagonally(currentField, newField), newField);
-                convertToKing(newField);
+                if (!take_pawn(opponent, currentField, searchMiddleFieldsDiagonally(currentField, newField), newField)) {
+                    return false;
+                }
+                if (newField.getY() == board.getHeight()) {
+                    newField.convertToKing();
+                }
             }
             else if (absDistanceX > 1 || absDistanceY > 1 || absDistanceX == absDistanceY || (distanceX == 0 && distanceY == -1)) {
-                System.out.println("Can only move by 1 field up/right/left");
+                errorMsg = "Can only move by 1 field up/right/left";
+                return false;
             }
             else {
                 newField.movePawn(currentField.getPawn()); //moving pawn
-                convertToKing(newField);
+                if (newField.getY() == board.getHeight()) {
+                    newField.convertToKing();
+                }
             }
         }
         //if king
         else if (currentField.getPawn().getType() == Pawn.Type.KING) {
             if (absDistanceX == absDistanceY) {
-                take_pawn(opponent, currentField, searchMiddleFieldsDiagonally(currentField, newField), newField);
+                return take_pawn(opponent, currentField, searchMiddleFieldsDiagonally(currentField, newField), newField);
             }
             else if (absDistanceX == 0 || absDistanceY == 0) {
                 if (!searchMiddleFieldsLinearly(currentField, newField)) {
                     newField.moveKing(currentField.getPawn()); //moving king
                 }
+                else {
+                    errorMsg = "Opponent's pawn on the way - can't take pawns linearly";
+                    return false;
+                }
             }
             else {
-                System.out.println("Can only move by X fields up/right/left or X fields diagonally while taking pawn");
+                errorMsg = "Can only move by X fields up/right/left or X fields diagonally while taking pawn";
+                return false;
             }
         }
         else {
-            System.out.println("Other invalid move");
+            errorMsg = "Other invalid move";
+            return false;
             //try again
         }
+        return true;
     }
     //returns a taken field or dummy field if less or more than 1 pawn found
     //expects newField to be empty
@@ -123,17 +148,27 @@ public class Player {
         Field fieldToTake = new Field(); //dummy field
         if (distanceX > 0 && distanceY > 0) {
             int x = distanceX - 1;
-            for (int y = distanceY - 1; takenCount < 2 && oldField.getY() + y != newField.getY(); ++y) {
+            for (int y = distanceY - 1; takenCount < 2 && y != 0; --y) {
                 if (board.findField(oldField.getX() + x, oldField.getY() + y).taken()) {
                     ++takenCount;
                     fieldToTake = board.findField(oldField.getX() + x, oldField.getY() + y);
                 }
-                ++x;
+                --x;
             }
         }
         else if (distanceX > 0 && distanceY < 0) {
             int x = distanceX - 1;
-            for (int y = distanceY + 1; takenCount < 2 && oldField.getY() + y != newField.getY(); --y) {
+            for (int y = distanceY + 1; takenCount < 2 && y != 0; ++y) {
+                if (board.findField(oldField.getX() + x, oldField.getY() + y).taken()) {
+                    ++takenCount;
+                    fieldToTake = board.findField(oldField.getX() + x, oldField.getY() + y);
+                }
+                --x;
+            }
+        }
+        else if (distanceX < 0 && distanceY > 0) {
+            int x = distanceX + 1;
+            for (int y = distanceY - 1; takenCount < 2 && y != 0; --y) {
                 if (board.findField(oldField.getX() + x, oldField.getY() + y).taken()) {
                     ++takenCount;
                     fieldToTake = board.findField(oldField.getX() + x, oldField.getY() + y);
@@ -141,24 +176,15 @@ public class Player {
                 ++x;
             }
         }
-        else if (distanceX < 0 && distanceY > 0) {
-            int x = distanceX + 1;
-            for (int y = distanceY - 1; takenCount < 2 && oldField.getY() + y != newField.getY(); ++y) {
-                if (board.findField(oldField.getX() + x, oldField.getY() + y).taken()) {
-                    ++takenCount;
-                    fieldToTake = board.findField(oldField.getX() + x, oldField.getY() + y);
-                }
-                --x;
-            }
-        }
         else {
             int x = distanceX + 1;
-            for (int y = distanceY + 1; takenCount < 2 && oldField.getY() + y != newField.getY(); --y) {
+            //in loop, when y == 0, then the checking field is oldField - the end of searching
+            for (int y = distanceY + 1; takenCount < 2 && y != 0; ++y) {
                 if (board.findField(oldField.getX() + x, oldField.getY() + y).taken()) {
                     ++takenCount;
                     fieldToTake = board.findField(oldField.getX() + x, oldField.getY() + y);
                 }
-                --x;
+                ++x;
             }
         }
         if (takenCount != 1) {
@@ -203,20 +229,23 @@ public class Player {
         //shouldn't get there
         else {
             System.out.println("Unexpected arguments in searchMiddleFieldsLinearly(Field, Field)");
+            errorMsg = "Unexpected arguments in searchMiddleFieldsLinearly(Field, Field)";
             invalid = true;
             System.exit(1);
         }
         return invalid;
     }
-
-    private void take_pawn(Player opponent, Field oldField, Field midField, Field newField) {
+    //returns true on successfull take
+    private boolean take_pawn(Player opponent, Field oldField, Field midField, Field newField) {
         Field dummyField = new Field();
         if (midField.equalTo(dummyField)) {
-            System.out.println("Invalid number of pawns to take (must be 1)");
+            errorMsg = "Invalid number of pawns to take (must be 1)";
+            return false;
             //try again
         }
         else if (color == midField.getPawn().getColor()) {
-            System.out.println("Can't take your own pawn");
+            errorMsg = "Can't take your own pawn";
+            return false;
             //try again
         }
         else {
@@ -228,11 +257,11 @@ public class Player {
                 newField.remLife();
             }
         }
+        return true;
     }
 
-    private void convertToKing(Field field) {
-        if (field.getY() == board.getHeight()) {
-            field.convertToKing();
-        }
+    //for unit tests
+    public void convertToKing(Field field) {
+        field.convertToKing();
     }
 }
