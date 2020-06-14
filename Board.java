@@ -77,7 +77,7 @@ public class Board implements Serializable {
         }
     }
     //board index starting from 0, so returns height - 1
-    public int getHeight() {
+    public int getMaxY() {
         return height - 1;
     }
     //for easier tests
