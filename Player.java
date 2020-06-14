@@ -2,13 +2,13 @@ package com.checkers;
 
 public class Player {
     private int reviveCount;
-    public int pawnCount;
+    private int pawnCount;
     private int maxPawnCount;
-    public Pawn.Color color;
-    public Board board;
-    public String name;
-    public int mode;
-    public String errorMsg;
+    private Pawn.Color color;
+    private Board board;
+    private String name;
+    private int mode;
+    private String errorMsg;
 
     public Player(int m, String c, String n) {
         errorMsg = "";
@@ -37,6 +37,10 @@ public class Player {
     public Board getBoard() {
         return board;
     }
+
+    public String getErrorMsg() { return errorMsg; }
+    
+    public void setBoard(Board b) { board = b; }
     //returns true if the turn is finished, otherwise false
     public boolean revive(Field revField) {
         if (reviveCount == 0) {
@@ -260,8 +264,8 @@ public class Player {
         return true;
     }
 
-    //for unit tests
-    public void convertToKing(Field field) {
+    //only for unit tests
+    void utConvertToKing(Field field) {
         field.convertToKing();
     }
 }
