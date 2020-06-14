@@ -39,7 +39,7 @@ public class Player {
     }
 
     public String getErrorMsg() { return errorMsg; }
-    
+
     public void setBoard(Board b) { board = b; }
     //returns true if the turn is finished, otherwise false
     public boolean revive(Field revField) {
