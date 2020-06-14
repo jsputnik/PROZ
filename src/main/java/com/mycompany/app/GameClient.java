@@ -13,7 +13,6 @@ public final class GameClient implements Runnable {
     static final String HOST = System.getProperty("host", "127.0.0.1");
     static final int PORT = Integer.parseInt(System.getProperty("port", "8992"));
     private static String data = null;
-    private static TestClass odp;
     private static JoinServer js;
 
     GameClient(JoinServer jsinstance) {
@@ -21,7 +20,7 @@ public final class GameClient implements Runnable {
     }
 
     public void run() {
-               EventLoopGroup group = new NioEventLoopGroup();
+        EventLoopGroup group = new NioEventLoopGroup();
         try {
             Bootstrap b = new Bootstrap();
             b.group(group)
@@ -42,8 +41,7 @@ public final class GameClient implements Runnable {
                     if (data != null) {
                         if (data.equals("bye")) break;
 
-                        TestClass test = new TestClass(0, data);
-                        test.print();
+                        TestClass test = new test2(2, data);
 
                         // Sends the received line to the server.
                         lastWriteFuture = ch.writeAndFlush(test);
@@ -53,8 +51,6 @@ public final class GameClient implements Runnable {
                 TestClass response = handler.getResponse();
                 synchronized(this) {
                     if (response != null) {
-                        System.err.print("Client response: ");
-                        response.print();
                         js.setText(response);
                     }
                 }
@@ -74,11 +70,5 @@ public final class GameClient implements Runnable {
 
     public void writeMessage(String text) {
         data = text;
-    }
-
-    public String getMessage() {
-        if (odp != null)
-            return odp.getData();
-        return null;
     }
 }

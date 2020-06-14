@@ -12,7 +12,7 @@ public class GameClientHandler extends SimpleChannelInboundHandler<TestClass> {
     public TestClass getResponse() {
         synchronized (this) {
             if (response != null) {
-                TestClass test = new TestClass(response);
+                TestClass test = response.cloneDeep();
                 response = null;
                 return test;
             }
@@ -26,8 +26,6 @@ public class GameClientHandler extends SimpleChannelInboundHandler<TestClass> {
 
     @Override
     public void channelRead0(ChannelHandlerContext ctx, TestClass msg) throws Exception {
-        System.err.print(ctx.channel().remoteAddress() + " ");
-        msg.print();
         response = msg;
     }
 

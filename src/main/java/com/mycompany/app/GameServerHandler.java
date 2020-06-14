@@ -5,9 +5,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
-import io.netty.handler.ssl.SslHandler;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
 
@@ -23,13 +20,16 @@ public class GameServerHandler extends SimpleChannelInboundHandler<TestClass> {
 
     @Override
     public void channelRead0(ChannelHandlerContext ctx, TestClass msg) throws Exception {
-        System.err.print("Message recieved: ");
-        msg.print();
+        String[] arr = new String[10];
+        int i = 0;
+        for(Channel c: channels) {
+            arr[i++] = String.valueOf(c.remoteAddress());
+        }
+        msg.setChannels(arr);
 
         for (Channel c: channels) {
-//            System.err.println(c.remoteAddress());
             if (c != ctx.channel()) {
-                c.writeAndFlush(msg);
+                c.writeAndFlush(msg).sync();
             }
         }
     }

@@ -36,12 +36,12 @@ public class Pawn {
 
     public Type getType() { return type; }
     //false if dead
-    public boolean remLife() {
+    public boolean removeLife() {
         --lives;
-        return lives != 0;
+        return lives > 0;
     }
-
-    public void remPawn() {
+    //sets pawns lives to 0, doesn't remove Pawn object
+    public void removePawn() {
         lives = 0;
     }
 

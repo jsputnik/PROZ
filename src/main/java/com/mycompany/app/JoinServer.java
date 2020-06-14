@@ -1,5 +1,8 @@
 package com.mycompany.app;
 
+import io.netty.channel.Channel;
+import io.netty.channel.group.ChannelGroup;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,6 +14,7 @@ public class JoinServer extends JFrame implements ActionListener {
     private JButton back;
     private GameClient gc;
     private Thread gameClientThread;
+    private TestClass resp = null;
 
     public JoinServer() {
         super("Checkers");
@@ -58,5 +62,13 @@ public class JoinServer extends JFrame implements ActionListener {
 
     public void setText(TestClass t) {
         textField.setText(t.getData());
+        resp = t;
+
+        System.out.println("Aktywni klienci:");
+        String[] channels = t.getChannels();
+        for (String c: channels) {
+            if(c != null)
+                System.err.println(c);
+        }
     }
 }

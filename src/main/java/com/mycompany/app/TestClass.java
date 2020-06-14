@@ -1,26 +1,14 @@
 package com.mycompany.app;
 
-import java.io.Serializable;
+import io.netty.channel.group.ChannelGroup;
 
-public class TestClass implements Serializable {
-    private int ID;
-    private String data;
 
-    public TestClass(int id, String d) {
-        ID = id;
-        data = d;
-    }
-
-    public TestClass(TestClass t) {
-        ID = t.ID;
-        data = t.data;
-    }
-
-    public void print() {
-        System.err.println(data);
-    }
-
-    public String getData() {
-        return data;
-    }
+interface TestClass {
+    public void print();
+    public String getData();
+    public int getID();
+    public void printNum();
+    public String[] getChannels();
+    public void setChannels(String[] c);
+    TestClass cloneDeep();
 }
