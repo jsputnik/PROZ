@@ -4,19 +4,23 @@ import java.io.Serializable;
 
 public class TestClass implements Serializable {
     private int ID;
-    private int[] data;
+    private String data;
 
-    public TestClass(int id, int arr[]) {
+    public TestClass(int id, String d) {
         ID = id;
-        this.data = arr;
+        data = d;
+    }
+
+    public TestClass(TestClass t) {
+        ID = t.ID;
+        data = t.data;
     }
 
     public void print() {
-        for(int i = 0; i < 5; ++i) System.err.print(data[i] + " ");
-        System.err.println("");
+        System.err.println(data);
     }
 
-    public void setData(int[] arr) {
-        this.data = arr;
+    public String getData() {
+        return data;
     }
 }
