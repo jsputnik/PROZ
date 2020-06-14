@@ -26,12 +26,6 @@ public class Field {
         y = b;
         pawn = new Pawn(c, t);
     }
-    //copy constructor
-    public Field(Field field) {
-        x = field.x;
-        y = field.y;
-        pawn = field.pawn;
-    }
 
     public int getX() {
         return x;
@@ -44,10 +38,7 @@ public class Field {
     public Pawn getPawn() {
         return pawn;
     }
-    //remove pawn from field
-    public void remPawn() {
-        pawn.remPawn();
-    }
+
     //remove life
     public boolean remLife() {
         return pawn.remLife();
