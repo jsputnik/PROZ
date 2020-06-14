@@ -84,5 +84,4 @@ public class Board implements Serializable {
     public Field findField(int x, int y) {
         return fields[y * width + x];
     }
-
 }
