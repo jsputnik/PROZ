@@ -39,24 +39,24 @@ public class Field {
         return pawn;
     }
 
-    //remove life
-    public boolean remLife() {
-        return pawn.remLife();
+    //remove life of pawn on the field, retruns false if it's already dead
+    public boolean removePawnLife() {
+        return pawn.removeLife();
     }
     //add new pawn on the field
     public void addPawn(Pawn.Color c) { pawn = new Pawn(c, Pawn.Type.BASIC); }
-    //move pawn
+    //move pawn from field to this; new pawn is created on field(this), then pawn's lives on old field are set to 0, meaning it's 'removed'
     public void movePawn(Pawn p) {
         pawn = new Pawn(p);
-        p.remPawn();
+        p.removePawn();
     }
     //move king
-    public void moveKing(Pawn p) {
+    public boolean moveKing(Pawn p) {
         movePawn(p);
-        pawn.remLife();
+        return pawn.removeLife();
     }
     //convert pawn to king
-    public void convertToKing () {
+    public void convertPawnToKing() {
         pawn.convertToKing();
     }
 
