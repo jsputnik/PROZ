@@ -66,9 +66,11 @@ public class Player {
             errorMsg = "Can only revive at the bottom/top row";
             return false;
         }
+        errorMsg = "";
         return true;
     }
-    //returns true if the turn is finished, toherwise false
+
+    //returns true if the turn is finished, otherwise false
     public boolean move(Player opponent, Field currentField, Field newField) {
         int distanceX = newField.getX() - currentField.getX();
         int absDistanceX = Math.abs(distanceX);
@@ -134,6 +136,7 @@ public class Player {
             errorMsg = "Other invalid move";
             return false;
         }
+        errorMsg = "";
         return true;
     }
     //returns a taken field or dummy field if less or more than 1 pawn found
@@ -254,6 +257,7 @@ public class Player {
                 }
             }
         }
+        errorMsg = "";
         return true;
     }
 
