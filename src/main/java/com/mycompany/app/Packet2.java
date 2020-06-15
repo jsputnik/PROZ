@@ -4,18 +4,11 @@ import java.io.Serializable;
 
 public class Packet2 implements Packet, Serializable {
     private int ID;
-    private String data;
-    private String[] channels;
+    private Board board;
 
-    public Packet2(int id, String d) {
+    public Packet2(int id, Board b) {
         ID = id;
-        data = d;
-    }
-
-    public Packet2(int id, String d, String[] g) {
-        ID = id;
-        data = d;
-        channels = g;
+        board = b;
     }
 
     @Override
@@ -27,36 +20,18 @@ public class Packet2 implements Packet, Serializable {
         return 0;
     }
 
-    public void setChannels(String[] c) {
-        channels = c;
+    @Override
+    public Board getBoard() {
+        return board;
     }
 
     @Override
     public Packet2 cloneDeep() {
-        return new Packet2(this.ID, this.data, this.channels);
-    }
-
-    @Override
-    public void print() {
-        System.out.println(data);
-    }
-
-    @Override
-    public String getData() {
-        return data;
+        return new Packet2(this.ID, this.board);
     }
 
     @Override
     public int getID() {
         return ID;
-    }
-
-    @Override
-    public void printNum() {
-
-    }
-
-    public String[] getChannels() {
-        return channels;
     }
 }

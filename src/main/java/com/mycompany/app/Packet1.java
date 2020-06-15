@@ -3,23 +3,17 @@ package com.mycompany.app;
 import java.io.Serializable;
 
 public class Packet1 implements Packet, Serializable {
-    private int number;
     private int ID;
-    private String data;
+    private int number;
 
     public Packet1() {
         ID = 1;
         number = -1;
     }
 
-    public Packet1(int id, String d, int n) {
-        ID = 1;
-        data = d;
+    public Packet1(int id, int n) {
+        ID = id;
         number = n;
-    }
-
-    public void printNum() {
-        System.out.println(number);
     }
 
     @Override
@@ -33,18 +27,13 @@ public class Packet1 implements Packet, Serializable {
     }
 
     @Override
+    public Board getBoard() {
+        return null;
+    }
+
+    @Override
     public Packet1 cloneDeep() {
-        return new Packet1(this.ID, this.data, this.number);
-    }
-
-    @Override
-    public void print() {
-        System.out.println(data);
-    }
-
-    @Override
-    public String getData() {
-        return data;
+        return new Packet1(this.ID, this.number);
     }
 
     @Override
@@ -52,13 +41,4 @@ public class Packet1 implements Packet, Serializable {
         return ID;
     }
 
-    @Override
-    public String[] getChannels() {
-        return null;
-    }
-
-    @Override
-    public void setChannels(String[] c) {
-
-    }
 }
