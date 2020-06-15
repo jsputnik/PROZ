@@ -13,10 +13,4 @@ public class Game {
             }
         });
     }
-    //public Game {
-    //one = new Player();
-    //two = new Player();
-    //}
-
-
 }

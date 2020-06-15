@@ -26,6 +26,11 @@ public class Packet2 implements Packet, Serializable {
     }
 
     @Override
+    public Player getPlayer() {
+        return null;
+    }
+
+    @Override
     public Packet2 cloneDeep() {
         return new Packet2(this.ID, this.board);
     }

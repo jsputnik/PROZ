@@ -1,6 +1,8 @@
 package com.mycompany.app;
 
-public class Field {
+import java.io.Serializable;
+
+public class Field implements Serializable {
     private int x;
     private int y;
     private Pawn pawn;

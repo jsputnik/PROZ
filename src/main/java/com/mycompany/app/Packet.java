@@ -6,5 +6,6 @@ interface Packet {
     public void setNum(int n);
     public int getNum();
     public Board getBoard();
+    public Player getPlayer();
     Packet cloneDeep();
 }

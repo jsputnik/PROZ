@@ -22,4 +22,9 @@ public class WaitingScreen extends JFrame  {
         add(field);
         setVisible(true);
     }
+
+    public void infoBox(String infoMessage, String titleBar)
+    {
+        JOptionPane.showMessageDialog(null, infoMessage, "InfoBox: " + titleBar, JOptionPane.INFORMATION_MESSAGE);
+    }
 }

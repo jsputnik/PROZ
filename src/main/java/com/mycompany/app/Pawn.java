@@ -1,6 +1,8 @@
 package com.mycompany.app;
 
-public class Pawn {
+import java.io.Serializable;
+
+public class Pawn implements Serializable {
     enum Type {BASIC, KING};
     enum Color {BLACK, WHITE};
 

@@ -81,11 +81,11 @@ public final class GameClient implements Runnable {
                 return;
             }
 
-            Packet msg = new Packet1(0, -1);
-            // Moves
+            // Read commands from the stdin.
             for (;;) {
                 synchronized(this) {
                     if (msg != null) {
+                        if (msg.getID() == -1) break;
                         lastWriteFuture = ch.writeAndFlush(msg);
                         msg = null;
                     }
@@ -93,16 +93,8 @@ public final class GameClient implements Runnable {
                 Packet p = handler.getResponse();
                 synchronized(this) {
                     if (p != null) {
-                        if (p.getID() == -1) break;
                         rsp = p.cloneDeep();
                         p = null;
-                        g.setBoard(rsp.getBoard());
-                        g.setMove(true);
-                        while(g.getMove() == true);
-                        if(g.getPawnCount() == 0) // koniec gry
-                            msg = new Packet1(-1, -1);
-                        else
-                            msg = new Packet2(2, g.getBoard());
                     }
                 }
             }
