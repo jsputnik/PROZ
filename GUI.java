@@ -1,4 +1,4 @@
-package com.checkers;
+package com.mycompany.app;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,7 +8,10 @@ import java.awt.event.ActionListener;
 public class GUI extends JFrame implements ActionListener {
     private JButton revive;
     private JButton move;
-    //private Board board;
+    private JButton uTest1;
+    private JButton uTest2;
+    private JButton uTest3;
+    private JButton uTest4;
     private Player player;
     private Player opponent;
 
@@ -18,35 +21,51 @@ public class GUI extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setSize(500, 500);
-        player = p;
-        opponent = new Player(1, "white", "two");
-        //board = new Board(p.mode, p.color);
         revive = new JButton("revive");
         move = new JButton("move");
+        uTest1 = new JButton("test1");
+        uTest2 = new JButton("test2");
+        uTest3 = new JButton("test3");
+        uTest4 = new JButton("test4");
         revive.addActionListener(this);
         move.addActionListener(this);
-        setLayout(new GridLayout(2, 1, 0, 10));
+        uTest1.addActionListener(this);
+        uTest2.addActionListener(this);
+        uTest3.addActionListener(this);
+        uTest4.addActionListener(this);
+        setLayout(new GridLayout(6, 1, 0, 10));
         add(revive);
         add(move);
+        add(uTest1);
+        add(uTest2);
+        add(uTest3);
+        add(uTest4);
         setVisible(true);
     }
 
     public void actionPerformed(ActionEvent pos) {
         Object source = pos.getSource();
         if (source == revive) {
-            System.out.println("current player");
-            player.getBoard().printBoard();
-            System.out.println("opponent");
-            opponent.getBoard().printBoard();
-            //player.getBoard().rotate();
-            //System.out.println("current players rotated board");
-            //player.getBoard().printBoard();
-            //player.revive(player.board.findField(3, 0));
+            System.out.println("Revive clicked");
         }
         else if (source == move) {
-            player.move(opponent, player.board.findField(0, 1), player.board.findField(0, 2));
-            System.out.println("board after move");
-            player.getBoard().printBoard();
+            System.out.println("move clicked");
+        }
+        else if (source == uTest1) {
+            ModelUnitTest modelUnitTest = new ModelUnitTest(1);
+            modelUnitTest.test1();
+        }
+        else if (source == uTest2) {
+            ModelUnitTest modelUnitTest = new ModelUnitTest(1);
+            modelUnitTest.test2();
+        }
+        else if (source == uTest3) {
+            ModelUnitTest modelUnitTest = new ModelUnitTest(1);
+            modelUnitTest.test3();
+        }
+        else if (source == uTest4) {
+            ModelUnitTest modelUnitTest = new ModelUnitTest(1);
+            modelUnitTest.test4();
         }
     }
 }
