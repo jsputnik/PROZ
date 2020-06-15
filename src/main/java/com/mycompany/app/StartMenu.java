@@ -32,7 +32,7 @@ public class StartMenu extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent pos) {
         Object source = pos.getSource();
         if (source == start) {
-            new NewLoadGame();
+            new NewJoinMenu();
             dispose();
         }
         else if (source == help) {

@@ -8,9 +8,15 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
 
-public class GameServerHandler extends SimpleChannelInboundHandler<TestClass> {
+public class GameServerHandler extends SimpleChannelInboundHandler<Packet> {
 
     static final ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+
+    private int channelCount(ChannelGroup cg) {
+        int i = 0;
+        for (Channel c : cg) i++;
+        return i;
+    }
 
     @Override
     public void channelActive(final ChannelHandlerContext ctx) {
@@ -19,13 +25,18 @@ public class GameServerHandler extends SimpleChannelInboundHandler<TestClass> {
     }
 
     @Override
-    public void channelRead0(ChannelHandlerContext ctx, TestClass msg) throws Exception {
-        String[] arr = new String[10];
-        int i = 0;
-        for(Channel c: channels) {
-            arr[i++] = String.valueOf(c.remoteAddress());
+    public void channelRead0(ChannelHandlerContext ctx, Packet msg) throws Exception {
+        System.err.println("Message recieved");
+        if (msg.getID() == 1) {
+            msg.setNum(channelCount(channels));
+
+            for (Channel c: channels) {
+                if (c == ctx.channel()) {
+                    c.writeAndFlush(msg).sync();
+                }
+            }
+            return;
         }
-        msg.setChannels(arr);
 
         for (Channel c: channels) {
             if (c != ctx.channel()) {

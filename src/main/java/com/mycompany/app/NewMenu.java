@@ -4,13 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-public class GmodeMenu extends JFrame implements ActionListener {
+public class NewMenu extends JFrame implements ActionListener {
     private JButton mode1;
     private JButton mode2;
     private JButton mode3;
     private JButton back;
+    GameClient gc;
 
-    public GmodeMenu() {
+    public NewMenu() {
         super("Checkers");
         setLocation(700, 400); //1950x
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -36,7 +37,7 @@ public class GmodeMenu extends JFrame implements ActionListener {
         Object source = pos.getSource();
 
         if (source == back) {
-            new NewLoadGame();
+            new NewJoinMenu();
             dispose();
             return;
         }
@@ -46,16 +47,7 @@ public class GmodeMenu extends JFrame implements ActionListener {
 
         if(nickname == null) {
             dispose();
-            new NewLoadGame();
-            return;
-        }
-
-        JOptionPane setColor = new JOptionPane();
-        Object[] options = {"black", "white"};
-        String color = (String)setColor.showInputDialog(this,"Choose color:","Set color", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-        if(color == null) {
-            dispose();
-            new NewLoadGame();
+            new NewJoinMenu();
             return;
         }
 
@@ -64,8 +56,21 @@ public class GmodeMenu extends JFrame implements ActionListener {
         else if (source == mode2) m = 2;
         else  m = 3;
 
-        Player p = new Player(m, color, nickname);
         dispose();
-        new GUI(p);
+        gc = new GameClient(m, "white", nickname);
+
+        Runnable r = new Runnable() {
+            public void run() {
+                try {
+                    gc.run();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Thread gameClientThread = new Thread(r);
+        gameClientThread.start();
+
     }
 }

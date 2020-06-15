@@ -12,11 +12,19 @@ public final class GameClient implements Runnable {
 
     static final String HOST = System.getProperty("host", "127.0.0.1");
     static final int PORT = Integer.parseInt(System.getProperty("port", "8992"));
-    private static String data = null;
-    private static JoinServer js;
+    private Packet msg = null;
+    private Packet rsp = null;
+    boolean turn;
+    boolean gameStart = false;
+    int mode;
+    String color;
+    String nickname;
 
-    GameClient(JoinServer jsinstance) {
-        js = jsinstance;
+    GameClient(int mode, String color, String nickname) {
+        this.mode = mode;
+        this.color = color;
+        this.nickname = nickname;
+        this.turn = color.equals("white");
     }
 
     public void run() {
@@ -34,24 +42,59 @@ public final class GameClient implements Runnable {
             GameClientHandler handler =
                     (GameClientHandler) f.channel().pipeline().last();
 
-            // Read commands from the stdin.
             ChannelFuture lastWriteFuture = null;
-            for (;;) {
-                synchronized(this) {
-                    if (data != null) {
-                        if (data.equals("bye")) break;
 
-                        TestClass test = new test2(2, data);
+            // Waiting for other player to join
+            WaitingScreen ws = new WaitingScreen();
+            msg = new Packet1();
 
-                        // Sends the received line to the server.
-                        lastWriteFuture = ch.writeAndFlush(test);
-                        data = null;
+            System.err.println(color);
+            while(!gameStart) {
+                lastWriteFuture = ch.writeAndFlush(msg);
+                Thread.sleep(1000);
+                for (; ; ) {
+                    // waiting for server response that two players are online
+                    Packet p = handler.getResponse();
+                    synchronized (this) {
+                        if (p != null) {
+                            rsp = p.cloneDeep();
+                            break;
+                        }
                     }
                 }
-                TestClass response = handler.getResponse();
+                if (rsp.getID() == 1 && rsp.getNum() == 1 && color.equals("black")) {
+                    System.err.println("No active game");
+                    break;
+                }
+
+                if (rsp.getID() == 1 && rsp.getNum() == 2)
+                    gameStart = true;
+            }
+            ws.dispose();
+
+            GUI g;
+            if (gameStart) {
+                // if two players are online, start the game
+                g = new GUI(new Player(mode, color, nickname));
+            }
+            else {
+                return;
+            }
+
+            // Read commands from the stdin.
+            for (;;) {
                 synchronized(this) {
-                    if (response != null) {
-                        js.setText(response);
+                    if (msg != null) {
+                        if (msg.getID() == -1) break;
+                        lastWriteFuture = ch.writeAndFlush(msg);
+                        msg = null;
+                    }
+                }
+                Packet p = handler.getResponse();
+                synchronized(this) {
+                    if (p != null) {
+                        rsp = p.cloneDeep();
+                        p = null;
                     }
                 }
             }
@@ -68,7 +111,7 @@ public final class GameClient implements Runnable {
         }
     }
 
-    public void writeMessage(String text) {
-        data = text;
+    public void assignChannel() {
+        msg = new Packet1();
     }
 }

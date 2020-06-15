@@ -5,12 +5,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class NewLoadGame extends JFrame implements ActionListener {
+public class NewJoinMenu extends JFrame implements ActionListener {
     private JButton newGame;
     private JButton loadGame;
     private JButton back;
 
-    public NewLoadGame() {
+    public NewJoinMenu() {
         super("Checkers");
         setLocation(700, 400); //1950x
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,11 +32,11 @@ public class NewLoadGame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent pos) {
         Object source = pos.getSource();
         if (source == newGame) {
-            new GmodeMenu();
+            new NewMenu();
             dispose();
         }
         else if (source == loadGame) {
-            new JoinServer();
+            new JoinMenu();
             dispose();
         }
         else if (source == back) {

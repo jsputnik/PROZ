@@ -44,7 +44,7 @@ public class GUI extends JFrame implements ActionListener {
             //player.revive(player.board.findField(3, 0));
         }
         else if (source == move) {
-            player.move(opponent, player.board.findField(0, 1), player.board.findField(0, 2));
+            player.move(opponent, player.getBoard().findField(0, 1), player.getBoard().findField(0, 2));
             System.out.println("board after move");
             player.getBoard().printBoard();
         }

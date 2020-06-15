@@ -2,13 +2,18 @@ package com.mycompany.app;
 
 import java.io.Serializable;
 
-public class test1 implements TestClass, Serializable {
+public class Packet1 implements Packet, Serializable {
     private int number;
     private int ID;
     private String data;
 
-    public test1(int id, String d, int n) {
-        ID = id;
+    public Packet1() {
+        ID = 1;
+        number = -1;
+    }
+
+    public Packet1(int id, String d, int n) {
+        ID = 1;
         data = d;
         number = n;
     }
@@ -18,8 +23,18 @@ public class test1 implements TestClass, Serializable {
     }
 
     @Override
-    public test1 cloneDeep() {
-        return new test1(this.ID, this.data, this.number);
+    public void setNum(int n) {
+        this.number = n;
+    }
+
+    @Override
+    public int getNum() {
+        return number;
+    }
+
+    @Override
+    public Packet1 cloneDeep() {
+        return new Packet1(this.ID, this.data, this.number);
     }
 
     @Override

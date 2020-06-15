@@ -6,13 +6,13 @@ import io.netty.channel.SimpleChannelInboundHandler;
 /**
  * Handles a client-side channel.
  */
-public class GameClientHandler extends SimpleChannelInboundHandler<TestClass> {
-    private static TestClass response = null;
+public class GameClientHandler extends SimpleChannelInboundHandler<Packet> {
+    private static Packet response = null;
 
-    public TestClass getResponse() {
+    public Packet getResponse() {
         synchronized (this) {
             if (response != null) {
-                TestClass test = response.cloneDeep();
+                Packet test = response.cloneDeep();
                 response = null;
                 return test;
             }
@@ -25,7 +25,7 @@ public class GameClientHandler extends SimpleChannelInboundHandler<TestClass> {
     }
 
     @Override
-    public void channelRead0(ChannelHandlerContext ctx, TestClass msg) throws Exception {
+    public void channelRead0(ChannelHandlerContext ctx, Packet msg) throws Exception {
         response = msg;
     }
 
