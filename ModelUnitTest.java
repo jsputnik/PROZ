@@ -9,11 +9,13 @@ public class ModelUnitTest {
         white = new Player(mode, "white", "white");
     }
 
-    public ModelUnitTest(int mode, Player one, Player two) {
-        black = one;
-        white = two;
+    public static void main(String[] args) {
+        ModelUnitTest uTest = new ModelUnitTest(1);
+        uTest.test1();
+        //uTest.test2();
+        //uTest.test3();
+        //uTest.test4();
     }
-
 
     public void test1() {
         System.out.println("board at the start");
